@@ -130,7 +130,6 @@ export const DashboardDealsChart: React.FC = () => {
           <Text size="sm" style={{ marginLeft: ".5rem" }}>
             Deals
           </Text>
-        
         </div>
       }
       extra={
@@ -142,22 +141,16 @@ export const DashboardDealsChart: React.FC = () => {
       <Suspense>
         <Area {...config} height={325} />
       </Suspense>
-      <div style={{
-        display:"flex",
-        justifyContent:"flex-end",
-        marginTop:5
-
-  
-      }}>
-      <DatePicker.RangePicker
-            value={selectedDateRange}
-            format={"DD/MM/YYYY"}
-            onChange={(dates) => {
-              // Convert moment objects to dayjs instances
-              const dayjsDates = dates.map((date) => dayjs(date));
-              setSelectedDateRange(dayjsDates);
-            }}
-          />
+      <div className="date-range">
+        <DatePicker.RangePicker
+          value={selectedDateRange}
+          format={"DD/MM/YYYY"}
+          onChange={(dates) => {
+            // Convert moment objects to dayjs instances
+            const dayjsDates = dates.map((date) => dayjs(date));
+            setSelectedDateRange(dayjsDates);
+          }}
+        />
       </div>
     </Card>
   );

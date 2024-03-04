@@ -56,3 +56,8 @@
     padding-left: 8px;
     padding-right: 8px;
 }
+.date-range{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
