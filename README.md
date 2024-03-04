@@ -2,4 +2,7 @@
 
 
 - Added Date Picker
+- https://github.com/shivamkawde18/refine_marble/blob/main/src/routes/dashboard/components/deals-chart.tsx
+- I've added a cool feature to the data-fetching part of our app. Now, when we get information from GraphQL (a data source), users can use a date picker to focus on specific time periods they're interested in. It's like having a filter for time!
+- Here's how it works: When you first see the data, it shows everything. But, if you want to see, for example, data only from January to March, you can use the date picker to select that range. The app then updates to show only the information from the chosen time frame.
 - To run project-  npm run dev
