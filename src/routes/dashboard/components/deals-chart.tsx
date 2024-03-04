@@ -1,11 +1,11 @@
-import React, { lazy, Suspense, useMemo } from "react";
+import React, { lazy, Suspense, useMemo, useState } from "react";
 
 import { useList, useNavigation } from "@refinedev/core";
 import { GetFieldsFromList } from "@refinedev/nestjs-query";
 
 import { DollarOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { AreaConfig } from "@ant-design/plots";
-import { Button, Card } from "antd";
+import { Button, Card, DatePicker } from "antd";
 import dayjs from "dayjs";
 
 import { Text } from "@/components";
@@ -31,7 +31,7 @@ export const DashboardDealsChart: React.FC = () => {
     console.error("Error fetching deals chart data", error);
     return null;
   }
-
+  const [selectedDateRange, setSelectedDateRange] = useState([]);
   const dealData = useMemo(() => {
     const won = data?.data
       .find((node) => node.title === "WON")
@@ -59,10 +59,21 @@ export const DashboardDealsChart: React.FC = () => {
         };
       });
 
-    return [...(won || []), ...(lost || [])].sort(
-      (a, b) => a.timeUnix - b.timeUnix,
+    let result = [...(won || []), ...(lost || [])].sort(
+      (a, b) => a.timeUnix - b.timeUnix
     );
-  }, [data]);
+
+    // Apply date range filter if selectedDateRange is not empty
+    if (selectedDateRange[0] && selectedDateRange[1]) {
+      result = result.filter(
+        (item) =>
+          item.timeUnix >= selectedDateRange[0].unix() &&
+          item.timeUnix <= selectedDateRange[1].unix()
+      );
+    }
+
+    return result;
+  }, [data, selectedDateRange]);
 
   const config: AreaConfig = {
     isStack: false,
@@ -106,7 +117,7 @@ export const DashboardDealsChart: React.FC = () => {
     <Card
       style={{ height: "100%" }}
       headStyle={{ padding: "8px 16px" }}
-      bodyStyle={{ padding: "24px 24px 0px 24px" }}
+      bodyStyle={{ padding: "10px" }}
       title={
         <div
           style={{
@@ -119,6 +130,7 @@ export const DashboardDealsChart: React.FC = () => {
           <Text size="sm" style={{ marginLeft: ".5rem" }}>
             Deals
           </Text>
+        
         </div>
       }
       extra={
@@ -130,6 +142,23 @@ export const DashboardDealsChart: React.FC = () => {
       <Suspense>
         <Area {...config} height={325} />
       </Suspense>
+      <div style={{
+        display:"flex",
+        justifyContent:"flex-end",
+        marginTop:5
+
+  
+      }}>
+      <DatePicker.RangePicker
+            value={selectedDateRange}
+            format={"DD/MM/YYYY"}
+            onChange={(dates) => {
+              // Convert moment objects to dayjs instances
+              const dayjsDates = dates.map((date) => dayjs(date));
+              setSelectedDateRange(dayjsDates);
+            }}
+          />
+      </div>
     </Card>
   );
 };
